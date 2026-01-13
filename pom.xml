@@ -1,5 +1,7 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.example</groupId>
@@ -25,7 +27,9 @@
           <source>1.8</source>
           <target>1.8</target>
           <fork>true</fork>
-          <!--          <executable>/Library/Java/JavaVirtualMachines/jdk-11.0.10.jdk/Contents/Home/bin/javac</executable>-->
+          <!--
+          <executable>/Library/Java/JavaVirtualMachines/jdk-11.0.10.jdk/Contents/Home/bin/javac</e
+          xecutable>-->
         </configuration>
       </plugin>
       <plugin>
@@ -59,7 +63,7 @@
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
-      <version>7.7.0</version>
+      <version>7.0.0</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/io.rest-assured/json-schema-validator -->
     <!--    <dependency>-->
