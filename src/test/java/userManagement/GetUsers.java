@@ -9,7 +9,11 @@ import org.jsoup.Connection;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.asserts.Assertion;
+import utils.JsonReader;
+import utils.PropertyReader;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.*;
 
 import static io.restassured.RestAssured.*;
@@ -346,14 +350,42 @@ public class GetUsers{
 
         resp.then().statusCode(200).body("message",containsString("Your chickens are now full and happy"));
     }
+
+    //retriving the value from array Json.
     @Test
     public void testDeleteRequest0(){
         Response resp = given()
-                .header("x-api-key","reqres_2bd774c43f544db78b99ff2a7f2fc01e")
-                .pathParam("id",1)
+                .header(JsonReader.getTestData("testDeleteRequest[0].apiKey_name"),JsonReader.getTestData("testDeleteRequest[0].apiValue_name"))
+                .pathParam(JsonReader.getTestData("testDeleteRequest[0].parameter"),JsonReader.getTestData("testDeleteRequest[0].id_value"))
                 .when().delete("https://reqres.in/api/users/{id}");
         Assert.assertEquals(resp.getStatusCode(), StatusCode.NO_CONTENT.code);
-        System.out.println(StatusCode.NO_CONTENT.message);
+        System.out.println(StatusCode.NO_CONTENT.code+" " +StatusCode.NO_CONTENT.message);
+    }
+
+    //retriving the value from json which key name to whole json.
+    @Test
+    public void testDeleteRequest2() throws IOException, ParseException, org.json.simple.parser.ParseException {
+        System.out.println(JsonReader.getTestData("testDeleteRequest2"));
+        Response resp = given()
+                .header(JsonReader.getTestData("testDeleteRequest2.apiKey_name"),JsonReader.getTestData("testDeleteRequest2.apiValue_name"))
+                .pathParam(JsonReader.getTestData("testDeleteRequest2.parameter"),JsonReader.getTestData("testDeleteRequest2.id_value"))
+                .when().delete("https://reqres.in/api/users/{id}");
+        Assert.assertEquals(resp.getStatusCode(), StatusCode.NO_CONTENT.code);
+        System.out.println(StatusCode.NO_CONTENT.code+" " +StatusCode.NO_CONTENT.message);
+    }
+
+    //here we have retrived from both Jsonfile and properties files.
+    @Test
+    public void testDeleteRequest3() throws IOException, ParseException, org.json.simple.parser.ParseException {
+        System.out.println(JsonReader.getTestData("testDeleteRequest2"));
+        String URL = PropertyReader.propertyReader("config.properties","baseURL")+JsonReader.getTestData("testDeleteRequest[0].delete_endpoint");
+        System.out.println(URL);
+        Response resp = given()
+                .header(JsonReader.getTestData("testDeleteRequest2.apiKey_name"),JsonReader.getTestData("testDeleteRequest2.apiValue_name"))
+                .pathParam(JsonReader.getTestData("testDeleteRequest2.parameter"),JsonReader.getTestData("testDeleteRequest2.id_value"))
+                .when().delete(URL);
+        Assert.assertEquals(resp.getStatusCode(), StatusCode.NO_CONTENT.code);
+        System.out.println(StatusCode.NO_CONTENT.code+" " +StatusCode.NO_CONTENT.message);
     }
 
 }

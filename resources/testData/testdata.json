@@ -1,0 +1,19 @@
+{
+  "testDeleteRequest": [
+    {
+      "apiKey_name": "x-api-key",
+      "apiValue_name": "reqres_2bd774c43f544db78b99ff2a7f2fc01e",
+      "parameter": "id",
+      "id_value": "1",
+      "delete_endpoint": "/users/{id}"
+    }
+  ],
+  "testDeleteRequest2":     {
+    "apiKey_name": "x-api-key",
+    "apiValue_name": "reqres_2bd774c43f544db78b99ff2a7f2fc01e",
+    "parameter": "id",
+    "id_value": "2",
+    "delete_endpoint": "/users/{id}"
+  }
+}
+
