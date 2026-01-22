@@ -353,8 +353,7 @@ public class GetUsers{
 
     //retriving the value from array Json.
     @Test
-    public void testDeleteRequest() throws IOException, ParseException, org.json.simple.parser.ParseException {
-        System.out.println(JsonReader.getTestData("testDeleteRequest[0]"));
+    public void testDeleteRequest0(){
         Response resp = given()
                 .header(JsonReader.getTestData("testDeleteRequest[0].apiKey_name"),JsonReader.getTestData("testDeleteRequest[0].apiValue_name"))
                 .pathParam(JsonReader.getTestData("testDeleteRequest[0].parameter"),JsonReader.getTestData("testDeleteRequest[0].id_value"))
