@@ -347,7 +347,7 @@ public class GetUsers{
         resp.then().statusCode(200).body("message",containsString("Your chickens are now full and happy"));
     }
     @Test
-    public void testDeleteRequest(){
+    public void testDeleteRequest0(){
         Response resp = given()
                 .header("x-api-key","reqres_2bd774c43f544db78b99ff2a7f2fc01e")
                 .pathParam("id",1)
