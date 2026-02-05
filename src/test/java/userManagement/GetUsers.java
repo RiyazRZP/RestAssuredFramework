@@ -1,17 +1,25 @@
 package userManagement;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import core.BaseTest;
 import core.StatusCode;
 import io.restassured.RestAssured;
 import io.restassured.http.*;
+
 import io.restassured.response.Response;
 import org.hamcrest.text.IsEmptyString;
 import org.jsoup.Connection;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import org.testng.asserts.Assertion;
 import utils.JsonReader;
 import utils.PropertyReader;
+import utils.SoftAssertionUtil;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
@@ -19,8 +27,12 @@ import java.util.*;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import java.lang.reflect.Method;
 
-public class GetUsers{
+
+public class GetUsers extends BaseTest {
+
+    SoftAssertionUtil softAssertUtil = new SoftAssertionUtil();
 
     @Test
     public void getUserData(){
@@ -353,7 +365,7 @@ public class GetUsers{
 
     //retriving the value from array Json.
     @Test
-    public void testDeleteRequest0(){
+    public void testDeleteRequest0() throws IOException {
         Response resp = given()
                 .header(JsonReader.getTestData("testDeleteRequest[0].apiKey_name"),JsonReader.getTestData("testDeleteRequest[0].apiValue_name"))
                 .pathParam(JsonReader.getTestData("testDeleteRequest[0].parameter"),JsonReader.getTestData("testDeleteRequest[0].id_value"))
@@ -362,7 +374,7 @@ public class GetUsers{
         System.out.println(StatusCode.NO_CONTENT.code+" " +StatusCode.NO_CONTENT.message);
     }
 
-    //retriving the value from json which key name to whole json.
+    //retriving the value from json which key name to one set of json.
     @Test
     public void testDeleteRequest2() throws IOException, ParseException, org.json.simple.parser.ParseException {
         System.out.println(JsonReader.getTestData("testDeleteRequest2"));
@@ -384,8 +396,92 @@ public class GetUsers{
                 .header(JsonReader.getTestData("testDeleteRequest2.apiKey_name"),JsonReader.getTestData("testDeleteRequest2.apiValue_name"))
                 .pathParam(JsonReader.getTestData("testDeleteRequest2.parameter"),JsonReader.getTestData("testDeleteRequest2.id_value"))
                 .when().delete(URL);
-        Assert.assertEquals(resp.getStatusCode(), StatusCode.NO_CONTENT.code);
+        softAssertUtil.assertEqual(StatusCode.NO_CONTENT.code,resp.getStatusCode(),"The status is not 204");
+        softAssertUtil.assertAll();
         System.out.println(StatusCode.NO_CONTENT.code+" " +StatusCode.NO_CONTENT.message);
+    }
+    @DataProvider(name = "apiDp")
+    public Object[][] dp(){
+        return new Object[][]{
+                {"1", "George"},
+                {"2", "Janet"}
+        };
+    }
+    @DataProvider(name="dpJson")
+    public Object[][] getData(Method m) throws Exception {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        List<Map<String, Object>> list = mapper.readValue(
+                new File("resources/testData/testDataForDp.json"),
+                new TypeReference<List<Map<String, Object>>>() {}
+        );
+
+        List<Map<String, Object>> filtered = new ArrayList<>();
+
+        for (Map<String, Object> data : list) {
+            if (data.get("testCaseName").toString().equalsIgnoreCase(m.getName())) {
+                filtered.add(data);
+            }
+        }
+        if (filtered.isEmpty()) {
+            throw new RuntimeException("No test data found for method: " + m.getName());
+        }
+
+        Object[][] result = new Object[filtered.size()][1];
+
+        for (int i = 0; i < filtered.size(); i++) {
+            result[i][0] = filtered.get(i);
+        }
+
+        return result;
+    }
+
+
+    @Test(dataProvider="apiDp")
+    @Parameters({"id","name"})
+    public void testWithDpAndPara(String id,String name) {
+        System.out.println(JsonReader.getTestData("testDeleteRequest2.apiKey_name"));
+        Response resp = given()
+                .header(JsonReader.getTestData("testDeleteRequest[0].apiKey_name"),JsonReader.getTestData("testDeleteRequest[0].apiValue_name"))    //If it is array be specific, if it is not no need.
+                .queryParam("id",id)
+                .queryParam("name",name)
+                .when()
+                .get(PropertyReader.propertyReader("config.properties","baseURL")+"/users");
+
+        softAssertUtil.assertEqual(resp.getStatusCode(),StatusCode.SUCCESS.code,"The status is not 200");
+        softAssertUtil.assertAll();
+    }
+    @Test(dataProvider="dpJson",groups = {"smoke"})
+    public void testWithDpWithJson(Map<String,Object> result) {
+        System.out.println(result);
+        System.out.println(JsonReader.getTestData("testDeleteRequest[0].apiKey_name"));  //it is array of json object it have not used indexing here so it retrived me all matched keys here.
+        Response resp = given()
+                .header(JsonReader.getTestData("testDeleteRequest[0].apiKey_name"),JsonReader.getTestData("testDeleteRequest[0].apiValue_name"))    //If it is array be specific use indexing, if it is not an array no need.
+                .queryParam("id",result.get("id"))
+                .queryParam("name",result.get("name"))
+                .when()
+                .get(PropertyReader.propertyReader("config.properties","baseURL")+"/users");
+
+        softAssertUtil.assertEqual(resp.getStatusCode(),StatusCode.SUCCESS.code,"The status is not 200");
+        softAssertUtil.assertAll();
+    }
+
+    @Test
+    public void getRequestWithFilter(){
+
+        Map<String,String> headers = new HashMap<String,String>();
+        headers.put("x-api-key", "reqres_2bd774c43f544db78b99ff2a7f2fc01e");
+
+        Response resp = given()
+                .headers(headers)
+                .when()
+                .get(PropertyReader.propertyReader("config.properties","baseURL")+"/users");
+
+        Assert.assertEquals(resp.getBody().jsonPath().get("data.find { it.first_name == 'George' }.email"), "george.bluth@reqres.in");
+        //resp.then().body("data.find { it.first_name == 'George' }.email"), is("george.bluth@reqres.in");
+        System.out.println("get is execueted");
+        System.out.println(resp.getBody().asString());
     }
 
 }

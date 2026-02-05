@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 
 public class JsonReader {
+
     public static String getTestDataForDirectKeyRetrive(String input) throws IOException, ParseException, org.json.simple.parser.ParseException {
         String testData;
         return testData = (String) getJsonData().get(input);//input is the key
@@ -31,13 +32,19 @@ public class JsonReader {
     }
 
 
-    public static String getTestData(String path) throws IOException {
+    public static String getTestData(String path){
+        JsonPath js = null;
+        try{
+            File filename = new File("resources/TestData/testdata.json");
+            String json = FileUtils.readFileToString(filename, StandardCharsets.UTF_8);
 
-        File filename = new File("resources/TestData/testdata.json");
-        String json = FileUtils.readFileToString(filename, StandardCharsets.UTF_8);
+            js = new JsonPath(json);
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
 
-        JsonPath js = new JsonPath(json);
-
+        assert js != null;
         return js.getString(path);
     }
 }

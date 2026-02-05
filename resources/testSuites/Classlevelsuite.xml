@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="API Automation Session Smoke Suite" parallel="tests" thread-count="2">
+    <test name="API Auth TestCases">
+        <classes>
+            <class name="userManagement.GetUsers"/>
+        </classes>
+    </test>
+    <test name = "Api Auth testCases-2">
+        <classes>
+            <class name="userManagement.AuthApisTest"/>
+        </classes>
+    </test>
+</suite>
