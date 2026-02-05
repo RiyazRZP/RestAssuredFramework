@@ -374,7 +374,7 @@ public class GetUsers{
         System.out.println(StatusCode.NO_CONTENT.code+" " +StatusCode.NO_CONTENT.message);
     }
 
-    //here we have retrived from both Jsonfile and properties files.
+    //here we have retrived from both Jsonfile and properties files. just for git..
     @Test
     public void testDeleteRequest3() throws IOException, ParseException, org.json.simple.parser.ParseException {
         System.out.println(JsonReader.getTestData("testDeleteRequest2"));
