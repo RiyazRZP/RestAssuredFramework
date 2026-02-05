@@ -5,14 +5,27 @@
       "apiValue_name": "reqres_2bd774c43f544db78b99ff2a7f2fc01e",
       "parameter": "id",
       "id_value": "1",
+      "name": "George",
       "delete_endpoint": "/users/{id}"
-    }
+    },
+    {
+      "apiKey_name": "x-api-key",
+      "apiValue_name": "reqres_2bd774c43f544db78b99ff2a7f2fc01e",
+      "parameter": "id",
+      "id_value": "1",
+      "name": "George",
+      "delete_endpoint": "/users/{id}"
+    },
+    "hellokaysiisd",
+    2,
+    5
   ],
   "testDeleteRequest2":     {
     "apiKey_name": "x-api-key",
     "apiValue_name": "reqres_2bd774c43f544db78b99ff2a7f2fc01e",
     "parameter": "id",
     "id_value": "2",
+    "name": "Janet",
     "delete_endpoint": "/users/{id}"
   }
 }
