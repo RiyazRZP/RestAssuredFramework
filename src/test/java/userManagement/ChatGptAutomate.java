@@ -7,6 +7,7 @@ import io.restassured.specification.RequestSpecification;
 import org.testng.annotations.Test;
 import pojo.ChatGptResponseBodyModels;
 import pojo.Data;
+import utils.PropertyReader;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -17,7 +18,7 @@ public class ChatGptAutomate {
     public RequestSpecification requestSpecBuild(){
         RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder()
                 .setBaseUri("https://api.openai.com")
-                .addHeader("Authorization","Bearer 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")
+                .addHeader("Authorization", PropertyReader.propertyReader("config.properties","api-key"))
                 .addPathParam("baseVersion","v1");
 
         RequestSpecification requestSpecification = requestSpecBuilder.build();  //reference is of interface(requestSpecification) but object is class(requestspecbuilder)
