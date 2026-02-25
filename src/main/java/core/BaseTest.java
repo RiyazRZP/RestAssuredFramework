@@ -44,6 +44,7 @@ public class BaseTest {
         } else if (result.getStatus() == ITestResult.SKIP) {
             ExtentReport.extentlog.log(LogStatus.SKIP, "Test case is Skiped " + result.getName());
         }
+        System.out.println("Test Case Execution Ended >>>>>>>>>>>>>>>>>>>>>>>");
         ExtentReport.extentreport.endTest(ExtentReport.extentlog);
     }
 

@@ -6,6 +6,7 @@ import core.BaseTest;
 import core.StatusCode;
 import io.restassured.RestAssured;
 import io.restassured.http.*;
+import utils.DataProviderUtil;
 
 import io.restassured.response.Response;
 import org.hamcrest.text.IsEmptyString;
@@ -32,7 +33,6 @@ import java.lang.reflect.Method;
 
 public class GetUsers extends BaseTest {
 
-    SoftAssertionUtil softAssertUtil = new SoftAssertionUtil();
 
     @Test
     public void getUserData(){
@@ -396,49 +396,12 @@ public class GetUsers extends BaseTest {
                 .header(JsonReader.getTestData("testDeleteRequest2.apiKey_name"),JsonReader.getTestData("testDeleteRequest2.apiValue_name"))
                 .pathParam(JsonReader.getTestData("testDeleteRequest2.parameter"),JsonReader.getTestData("testDeleteRequest2.id_value"))
                 .when().delete(URL);
-        softAssertUtil.assertEqual(StatusCode.NO_CONTENT.code,resp.getStatusCode(),"The status is not 204");
-        softAssertUtil.assertAll();
+        SoftAssertionUtil.assertEqual(StatusCode.NO_CONTENT.code,resp.getStatusCode(),"The status is not 204");
+        SoftAssertionUtil.assertAll();
         System.out.println(StatusCode.NO_CONTENT.code+" " +StatusCode.NO_CONTENT.message);
     }
-    @DataProvider(name = "apiDp")
-    public Object[][] dp(){
-        return new Object[][]{
-                {"1", "George"},
-                {"2", "Janet"}
-        };
-    }
-    @DataProvider(name="dpJson")
-    public Object[][] getData(Method m) throws Exception {
 
-        ObjectMapper mapper = new ObjectMapper();
-
-        List<Map<String, Object>> list = mapper.readValue(
-                new File("resources/testData/testDataForDp.json"),
-                new TypeReference<List<Map<String, Object>>>() {}
-        );
-
-        List<Map<String, Object>> filtered = new ArrayList<>();
-
-        for (Map<String, Object> data : list) {
-            if (data.get("testCaseName").toString().equalsIgnoreCase(m.getName())) {
-                filtered.add(data);
-            }
-        }
-        if (filtered.isEmpty()) {
-            throw new RuntimeException("No test data found for method: " + m.getName());
-        }
-
-        Object[][] result = new Object[filtered.size()][1];
-
-        for (int i = 0; i < filtered.size(); i++) {
-            result[i][0] = filtered.get(i);
-        }
-
-        return result;
-    }
-
-
-    @Test(dataProvider="apiDp")
+    @Test(dataProvider="apiDp", dataProviderClass = DataProviderUtil.class)
     @Parameters({"id","name"})
     public void testWithDpAndPara(String id,String name) {
         System.out.println(JsonReader.getTestData("testDeleteRequest2.apiKey_name"));
@@ -449,10 +412,10 @@ public class GetUsers extends BaseTest {
                 .when()
                 .get(PropertyReader.propertyReader("config.properties","baseURL")+"/users");
 
-        softAssertUtil.assertEqual(resp.getStatusCode(),StatusCode.SUCCESS.code,"The status is not 200");
-        softAssertUtil.assertAll();
+        SoftAssertionUtil.assertEqual(resp.getStatusCode(),StatusCode.SUCCESS.code,"The status is not 200");
+        SoftAssertionUtil.assertAll();
     }
-    @Test(dataProvider="dpJson",groups = {"smoke"})
+    @Test(dataProvider = "dpJson", dataProviderClass = DataProviderUtil.class, groups = {"smoke"})
     public void testWithDpWithJson(Map<String,Object> result) {
         System.out.println(result);
         System.out.println(JsonReader.getTestData("testDeleteRequest[0].apiKey_name"));  //it is array of json object it have not used indexing here so it retrived me all matched keys here.
@@ -463,8 +426,8 @@ public class GetUsers extends BaseTest {
                 .when()
                 .get(PropertyReader.propertyReader("config.properties","baseURL")+"/users");
 
-        softAssertUtil.assertEqual(resp.getStatusCode(),StatusCode.SUCCESS.code,"The status is not 200");
-        softAssertUtil.assertAll();
+        SoftAssertionUtil.assertEqual(resp.getStatusCode(),StatusCode.SUCCESS.code,"The status is not 200");
+        SoftAssertionUtil.assertAll();
     }
 
     @Test
