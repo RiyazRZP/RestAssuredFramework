@@ -17,8 +17,8 @@ public class ChatGptAutomate {
 
     public RequestSpecification requestSpecBuild(){
         RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder()
-                .setBaseUri("https://api.openai.com")
-                .addHeader("Authorization", PropertyReader.propertyReader("config.properties","api-key"))
+                .setBaseUri(PropertyReader.propertyReader("config.properties","chatgpt_url"))
+                .addHeader("Authorization", PropertyReader.propertyReader("config.properties","chatgpt_api-key"))
                 .addPathParam("baseVersion","v1");
 
         RequestSpecification requestSpecification = requestSpecBuilder.build();  //reference is of interface(requestSpecification) but object is class(requestspecbuilder)
