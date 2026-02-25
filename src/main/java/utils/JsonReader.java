@@ -18,6 +18,7 @@ public class JsonReader {
         return testData = (String) getJsonData().get(input);//input is the key
 
     }
+    //JsonOjbect
     public static JSONObject getJsonData() throws IOException, ParseException, org.json.simple.parser.ParseException {
 
         //pass the path of the testdata.json file
@@ -31,7 +32,7 @@ public class JsonReader {
         return jsonObject;
     }
 
-
+    //jsonPath
     public static String getTestData(String path){
         JsonPath js = null;
         try{
