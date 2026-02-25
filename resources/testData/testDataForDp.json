@@ -16,5 +16,11 @@
     "id_value": "2",
     "name": "Janet",
     "delete_endpoint": "/users/{id}"
+  },
+  {
+    "testCaseName": "postAddBook",
+    "userName": "GzpUser12345",
+    "password": "Test@1234",
+    "isbn": "9781449331818"
   }
 ]
